@@ -2,6 +2,7 @@ package sdes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.*;
 
 /* From http://mercury.webster.edu/aleshunas/COSC%205130/G-SDES.pdf
  * 
@@ -15,7 +16,7 @@ The encryption algorithm involves five functions: an initial permutation (IP); a
 function labeled fK, which involves both permutation and substitution operations and depends on
 a key input; a simple permutation function that switches (SW) the two halves of the data; the
 function fK again; and finally a permutation function that is the inverse of the initial permutation
-(IP–1). As was mentioned in Chapter 2, the use of multiple stages of permutation and substitution
+(IPï¿½1). As was mentioned in Chapter 2, the use of multiple stages of permutation and substitution
 results in a more complex algorithm, which increases the difficulty of cryptanalysis.
 
 IP -> fk -> SW -> fk -> IP-1
@@ -312,17 +313,86 @@ public class SDES {
 
 		return inverseIP;
 	}
-
-	public static void main(String[] args) {
-		byte[] plaintext = { 0,1,0,1,0,1,0,1 };
-		byte[] key = { 1,1,1,0,0,0,1,1,1,0 };
-
-		for (byte x : Encrypt(key, plaintext)) {
-			System.out.print(x + " ");
+	
+	public static String byteToString(byte[] ar){
+		String byteStr = "";
+		for( byte a : ar){
+			byteStr = byteStr + String.valueOf(a);
 		}
+		return byteStr;
+	}
+	
+	public static byte[] stringToByteArray(String str){
+		String[] arList = str.split("");
+		byte[] byteAr = new byte[str.length()];
+
+		for( int i = 0; i < arList.length; i ++){
+			byteAr[i] = Byte.valueOf(arList[i]);
+		}
+		return byteAr;
+	}
+	
+	public static void main(String[] args) {
+		
+		// ========== Parsing the text file =======================================
+		String filepath = "C:\\Users\\Rose\\Desktop\\SDES.txt";
+		File file = new File(filepath);
+		
+		List<String> original = new ArrayList<String>();
+		List<ArrayList<String>> applyAnswer = new ArrayList<ArrayList<String>>();
+		try(BufferedReader br = new BufferedReader(new FileReader(file))){
+			int currRow = 0;
+			String str = br.readLine(); // We skip the first line
+			original.add(str);
+			while((str = br.readLine()) != null){
+				original.add(str);
+				applyAnswer.add(new ArrayList<String>());
+				for( String s : str.split(" ")){
+					if(!s.isEmpty()){
+						applyAnswer.get(currRow).add(s);
+					}
+				}
+				
+				currRow ++;
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// ========== Printing the text file =======================================
+		System.out.println("========== Original SDES ============");
+		for( String o : original){
+			System.out.println(o);
+		}
+		System.out.println("=========== Solved SDES =============");
+		System.out.printf("%-15s%-15s%-15s", "Raw Key", "Plaintext", "CipherText");
 		System.out.println();
-		for (byte x : Decrypt(key, Encrypt(key, plaintext))) {
-			System.out.print(x + " ");
+		for ( ArrayList<String> arList : applyAnswer){
+			boolean solve = false; // This variable is to check whether if a row is "filled" or not ( requires answer )
+			
+			for(int i = 0; i < arList.size(); i ++){
+				if(arList.get(i).equals("?")){
+					
+					if(i == 1){ // If plaintext requires answer
+						String plaintext = byteToString(Decrypt(stringToByteArray(arList.get(0)), stringToByteArray(arList.get(2))));
+						System.out.printf("%-15s%-15s%-15s", arList.get(0), plaintext, arList.get(2));
+						solve = true;
+						break;
+					}
+					if(i == 2){ // If Ciphertext requires answer
+						String ciphertext = byteToString(Encrypt(stringToByteArray(arList.get(0)), stringToByteArray(arList.get(1))));
+						System.out.printf("%-15s%-15s%-15s", arList.get(0), arList.get(1), ciphertext);
+						solve = true;
+						break;
+					}
+				}
+			}
+			if(!solve){
+				System.out.printf("%-15s%-15s%-15s", arList.get(0), arList.get(1), arList.get(2));
+			}
+			System.out.println();
 		}
 	}
 }
