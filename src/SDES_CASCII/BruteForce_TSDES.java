@@ -1,8 +1,10 @@
 package SDES_CASCII;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import sdes.SDES;
 import triplesdes.TripleSDES;
@@ -42,12 +44,14 @@ public class BruteForce_TSDES {
 		return binary;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		// TODO Auto-generated method stub
 
+		PrintStream out = null;
 		byte ciphertext[] = new byte[0];
 
-		try(BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Kevin\\Desktop\\CS4780\\sdes\\src\\resources\\msg2.txt"))) {
+		try(BufferedReader br = new BufferedReader(new FileReader("src\\resources\\msg2.txt"))) {
+			out = new PrintStream(new FileOutputStream("bruteForce_TSDES.txt"));
 			StringBuilder sb = new StringBuilder();
 			String line = br.readLine();
 
@@ -90,13 +94,14 @@ public class BruteForce_TSDES {
 
 				}
 				System.out.println("Key1: " + key1);
+				out.println("Key1: " + key1);
 				System.out.println("Key2: " + key2);
+				out.println("Key2: " + key2);
 				System.out.println("plaintext: " + CASCII.toString(plaintext));
-
+				out.println("plaintext: " + CASCII.toString(plaintext));
 			}
 		}
-
-
+		out.close();
 	}
 }
 

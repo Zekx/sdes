@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.io.Writer;
 
 import sdes.SDES;
@@ -50,8 +51,9 @@ public class BruteForce_SDES {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		byte ciphertext[] = new byte[0];
+		PrintStream out = new PrintStream(new FileOutputStream("bruteForce_SDES.txt"));
 
-		try(BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Kevin\\Desktop\\CS4780\\sdes\\src\\resources\\msg1.txt"))) {
+		try(BufferedReader br = new BufferedReader(new FileReader("src\\resources\\msg1.txt"))) {
 			StringBuilder sb = new StringBuilder();
 			String line = br.readLine();
 
@@ -91,11 +93,13 @@ public class BruteForce_SDES {
 				
 			}
 			System.out.println("Key: " + key);
+			out.println("Key: " + key);
 			System.out.println("plaintext: " + CASCII.toString(plaintext));
+			out.println("plaintext: " + CASCII.toString(plaintext));
 
 		}
-
-
+		
+		out.close();
 	}
 
 }
