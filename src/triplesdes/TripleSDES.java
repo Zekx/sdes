@@ -60,7 +60,7 @@ public class TripleSDES {
 	public static void main(String args[]){
 		// For testing the keys
 		// ========== Parsing the text file =======================================
-		String filepath = "C:\\Users\\Rose\\Desktop\\TripleSDES.txt";
+		String filepath = "C:\\Users\\Vanarid\\Documents\\GitHub\\sdes\\src\\resources\\TripleSDES.txt";
 		File file = new File(filepath);
 		
 		List<String> original = new ArrayList<String>();

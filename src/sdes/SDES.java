@@ -335,7 +335,7 @@ public class SDES {
 	public static void main(String[] args) {
 		
 		// ========== Parsing the text file =======================================
-		String filepath = "C:\\Users\\Rose\\Desktop\\SDES.txt";
+		String filepath = "C:\\Users\\Vanarid\\Documents\\GitHub\\sdes\\src\\resources\\SDES.txt";
 		File file = new File(filepath);
 		
 		List<String> original = new ArrayList<String>();
