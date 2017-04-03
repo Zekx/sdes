@@ -36,7 +36,7 @@ public class TripleSDES {
 		 * Decryption(key1, Encrypt(key2, Decrypt(key1, ciphertext)))
 		 * 
 		 */
-		return SDES.Decrypt(rawkey1, SDES.Encrypt(rawkey2, SDES.Encrypt(rawkey1, ciphertext)));
+		return SDES.Decrypt(rawkey1, SDES.Encrypt(rawkey2, SDES.Decrypt(rawkey1, ciphertext)));
 	}
 	
 	public static String byteToString(byte[] ar){
