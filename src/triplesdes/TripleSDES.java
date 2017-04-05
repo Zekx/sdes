@@ -29,6 +29,8 @@ public class TripleSDES {
 		 */
 		return  SDES.Encrypt(rawkey1, SDES.Decrypt(rawkey2, SDES.Encrypt(rawkey1, plaintext)));
 	}
+	
+	//D3DES(c) = DDES(k1,EDES(k2,DDES(k1, c)))
 	public static byte[] Decrypt( byte[] rawkey1, byte[] rawkey2, byte[] ciphertext )
 	{
 		/*

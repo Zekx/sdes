@@ -381,20 +381,19 @@ public class CASCII {
 	public static byte Period = 30;
 	public static byte Apostrophe = 31;
 
-	public static String byteToString(byte[] ar){
+	public static String byteToString(byte[] ar) {
 		String byteStr = "";
-		for( byte a : ar){
+		for (byte a : ar) {
 			byteStr = byteStr + String.valueOf(a);
 		}
 		return byteStr;
 	}
 
-
-	public static byte[] stringToByteArray(String str){
+	public static byte[] stringToByteArray(String str) {
 		String[] arList = str.split("");
 		byte[] byteAr = new byte[str.length()];
 
-		for( int i = 0; i < arList.length - 1; i ++){
+		for (int i = 0; i < arList.length - 1; i++) {
 			byteAr[i] = Byte.valueOf(arList[i]);
 		}
 		return byteAr;
@@ -403,56 +402,65 @@ public class CASCII {
 	public static void main(String[] args) {
 		int input = 0;
 		Scanner in = new Scanner(System.in);
-		
-		do{
+
+		do {
 			System.out.println("Select the following options...");
 			System.out.println("1.	Encrypt a message.");
 			System.out.println("2.	Exit.");
-			
-			try{
+
+			try {
 				input = in.nextInt();
-				
-				while(input != 1 && input != 2 && input != 3){
+
+				while (input != 1 && input != 2 && input != 3) {
 					System.out.println("Not an appropriate option!\n");
 					System.out.println("Select the following options...");
 					System.out.println("1.	Encrypt a message.");
 					System.out.println("2.	Exit.");
-					
+
 					input = in.nextInt();
 				}
-			}catch(Exception e){
+			} catch (Exception e) {
 				System.out.println("Invalid input!");
 				System.exit(0);
 			}
-			
-			if(input == 1){
-				System.out.println("Please enter the message you want to encode: ");
-				
-				//STR IS THE STRING THAT YOU WANT TO ENCRYPT
-				String str = in.next();
-				str = str.toUpperCase();
-				
-				//CONVERT STR INTO A BIT ARRAY WITH PADDING
+
+			if (input == 1) {
+				/*System.out.println("Please enter the message you want to encode (type: '000' to end): ");
+
+				// STR IS THE STRING THAT YOU WANT TO ENCRYPT
+				String str = "";
+				while(in.hasNext()){
+					String val = in.next();
+					if(val.equals("000")){
+						break;
+					}
+					
+					str = str + val + " ";
+					str = str.toUpperCase();
+				}*/
+				String str = "WHOEVER THINKS HIS PROBLEM CAN BE SOLVED USING CRYPTOGRAPHY, DOESN'T UNDERSTAND HIS PROBLEM AND DOESN'T UNDERSTAND CRYPTOGRAPHY.  ATTRIBUTED BY ROGER NEEDHAM AND BUTLER LAMPSON TO EACH OTHER";
+
+				// CONVERT STR INTO A BIT ARRAY WITH PADDING
 				byte[] bittext = CASCII.Convert(str);
-				//SKEY IS THE STRING VALUE OF THE 10-BIT KEY THAT YOU WANT TO USE
-				String skey = "0111001101";
+				// SKEY IS THE STRING VALUE OF THE 10-BIT KEY THAT YOU WANT TO
+				// USE
+				String skey = "1011110100";
 				byte[] bkey = stringToByteArray(skey);
 				byte ciphertext[] = new byte[0];
 				byte temp[] = new byte[8];
 				byte bitarr[] = new byte[8];
 				int bcounter = 0;
-				for (int i = 0; i < bittext.length; i++){
-					if (bcounter <= 7){
+				for (int i = 0; i < bittext.length; i++) {
+					if (bcounter <= 7) {
 						bitarr[bcounter] = bittext[i];
 						bcounter++;
-					}
-					else {
+					} else {
 						temp = SDES.Encrypt(bkey, bitarr);
 						ciphertext = SDES.appendArray(ciphertext, temp);
 						bitarr[0] = bittext[i];
 						bcounter = 1;
 					}
-					if (i == bittext.length - 1){
+					if (i == bittext.length - 1) {
 						temp = SDES.Encrypt(bkey, bitarr);
 						ciphertext = SDES.appendArray(ciphertext, temp);
 					}
@@ -460,11 +468,16 @@ public class CASCII {
 				}
 				System.out.println("PLAINTEXT: " + str);
 				System.out.print("CIPHERTEXT: ");
-				for (int i = 0; i < ciphertext.length; i++){
+				String append = "";
+				for (int i = 0; i < ciphertext.length; i++) {
 					System.out.print(ciphertext[i]);
+					append = append + ciphertext[i];
 				}
+				
+				System.out.println();
+				System.out.println(append.equals("1011011001111001001011101111110000111110100000000001110111010001111011111101101100010011000000101101011010101000101111100011101011010111100011101001010111101100101110000010010101110001110111011111010101010100001100011000011010101111011111010011110111001001011100101101001000011011111011000010010001011101100011011110000000110010111111010000011100011111111000010111010100001100001010011001010101010000110101101111111010010110001001000001111000000011110000011110110010010101010100001000011010000100011010101100000010111000000010101110100001000111010010010101110111010010111100011111010101111011101111000101001010001101100101100111001110111001100101100011111001100000110100001001100010000100011100000000001001010011101011100101000111011100010001111101011111100000010111110101010000000100110110111111000000111110111010100110000010110000111010001111000101011111101011101101010010100010111100011100000001010101110111111101101100101010011100111011110101011011"));
 				System.out.println("\n");
 			}
-		}while(input != 2);
+		} while (input != 2);
 	}
 }

@@ -333,6 +333,12 @@ public class SDES {
 	}
 	
 	public static void main(String[] args) {
+		/*byte[] testKey = {1,1,1,1,1,1,1,1,1,1};
+		byte[] cipher = {0,0,0,0,0,1,0,0};
+		
+		for(byte x: Decrypt(testKey, cipher)){
+			System.out.print(String.valueOf(x));
+		}*/
 		
 		// ========== Parsing the text file =======================================
 		String filepath = "C:\\Users\\Vanarid\\Documents\\GitHub\\sdes\\src\\resources\\SDES.txt";
