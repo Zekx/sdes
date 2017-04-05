@@ -27,10 +27,14 @@ public class TripleSDES {
 		 * Encrypt(key1, Decrypt(key2, Encrypt(key1, plaintext)))
 		 * 
 		 */
-		return  SDES.Encrypt(rawkey1, SDES.Decrypt(rawkey2, SDES.Encrypt(rawkey1, plaintext)));
+		
+		byte[] first = SDES.Encrypt(rawkey1, plaintext);
+		byte[] second = SDES.Decrypt(rawkey2, first);
+		byte[] third = SDES.Encrypt(rawkey1, second);
+		
+		
+		return  third;
 	}
-	
-	//D3DES(c) = DDES(k1,EDES(k2,DDES(k1, c)))
 	public static byte[] Decrypt( byte[] rawkey1, byte[] rawkey2, byte[] ciphertext )
 	{
 		/*
@@ -38,7 +42,12 @@ public class TripleSDES {
 		 * Decryption(key1, Encrypt(key2, Decrypt(key1, ciphertext)))
 		 * 
 		 */
-		return SDES.Decrypt(rawkey1, SDES.Encrypt(rawkey2, SDES.Decrypt(rawkey1, ciphertext)));
+		
+		byte[] first = SDES.Decrypt(rawkey1, ciphertext);
+		byte[] second = SDES.Encrypt(rawkey2, first);
+		byte[] third = SDES.Decrypt(rawkey1, second);
+		
+		return third;
 	}
 	
 	public static String byteToString(byte[] ar){
@@ -62,7 +71,7 @@ public class TripleSDES {
 	public static void main(String args[]){
 		// For testing the keys
 		// ========== Parsing the text file =======================================
-		String filepath = "C:\\Users\\Vanarid\\Documents\\GitHub\\sdes\\src\\resources\\TripleSDES.txt";
+		String filepath = "src\\resources\\TripleSDES.txt";
 		File file = new File(filepath);
 		
 		List<String> original = new ArrayList<String>();
